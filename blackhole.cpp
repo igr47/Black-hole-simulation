@@ -1,4 +1,4 @@
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -42,7 +42,6 @@ out vec3 FragPos;
 out vec2 TexCoord;
 out vec3 Normal;
 out float Height;
-
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
@@ -89,6 +88,8 @@ uniform vec3 viewPos;
 uniform float time;
 uniform vec3 blackHolePos;
 uniform float schwarzschildRadius;
+uniform float diskInnerRadius;
+uniform float diskOuterRadius;
 
 // Accretion disk color based on temperature
 vec3 diskColor(float dist) {
@@ -219,6 +220,7 @@ uniform vec3 blackHolePos;
 uniform float schwarzschildRadius;
 uniform float diskInnerRadius;
 uniform float diskOuterRadius;
+uniform float rotationSpeed;
 
 // Turbulence function for disk texture
 float hash(vec2 p) {
@@ -619,11 +621,15 @@ int main() {
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     
-    // Initialize GLEW
-    if (glewInit() != GLEW_OK) {
-        std::cerr << "Failed to initialize GLEW" << std::endl;
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        std::cerr << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+    // Initialize GLEW
+    /*if (!glfwInit()) {
+        std::cerr << "Failed to initialize GLEW" << std::endl;
+        return -1;
+    }*/
     
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
